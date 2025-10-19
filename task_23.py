@@ -7,6 +7,8 @@
 # Переменная list_word использовалась в функции start_game, что приводило к ошибке, т.к. переменная инициализировалась
 # только при выборе пункта "Начать игру" в меню и не инициализировалась при загрузке игры из меню
 # Код изменён, чтобы list_word инициализировалась в функции start_game
+# UPDATE: в определении функции save_game добавлен перенос строки \n в конце строки сохранения
+# в определении функции load_game добавлен вызов метода strip для строки mask
 
 import random
 import uuid
@@ -39,7 +41,7 @@ def save_game(id_session, word, mask):
     f = open("save_game.csv", "at")
     dt = datetime.datetime.now()
     mask = "".join(mask)
-    str = f"{dt}|{id_session}|{name}|{word}|{mask}"
+    str = f"{dt}|{id_session}|{name}|{word}|{mask}\n"
     f.write(str)
     f.close()
     print("Сохранил игру!")
@@ -56,7 +58,7 @@ def load_game():
     indx_load = int(input("Введите номер:"))
     sg = list_str[indx_load].split("|")
     key = sg[3]
-    mask = sg[4]
+    mask = sg[4].strip()
     session_uuid = sg[1]
     print(session_uuid,key, list(mask))
     start_game(session_uuid,key.strip(), list(mask))
